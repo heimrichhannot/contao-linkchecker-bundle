@@ -46,17 +46,17 @@ class LinkChecker
      *
      * @return bool|mixed The translated status code, or false if the link was not tested
      */
-    protected function testOne($strUrl)
+    protected function testOne(string $url)
     {
-        if (System::getContainer()->get('huh.utils.string')->startsWith($strUrl, 'mailto:')) {
+        if (System::getContainer()->get('huh.utils.string')->startsWith($url, 'mailto:')) {
             return $this->getResult(static::STATUS_MAILTO);
         }
 
-        if (!Validator::isUrl($strUrl)) {
+        if (!Validator::isUrl($url)) {
             return $this->getResult(static::STATUS_INVALID);
         }
 
-        if ($arrHeaders = @get_headers($strUrl)) {
+        if ($arrHeaders = @get_headers($url)) {
             return $this->getResult($arrHeaders[0]);
         }
 
@@ -89,23 +89,27 @@ class LinkChecker
      *
      * @return mixed
      */
-    protected function getResult($strResult)
+    protected function getResult(string $result)
     {
         $objTemplate = new FrontendTemplate('linkchecker_result_default');
-        $strLabel = $GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$strResult];
-        $objTemplate->text = $strLabel ?: $strResult;
-        $objTemplate->status = $this->getStatusClass($strResult);
+        $strLabel = $GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$result];
+        $objTemplate->text = $strLabel ?: $result;
+        $objTemplate->status = $this->getStatusClass($result);
 
         return $objTemplate->parse();
     }
 
     /**
      * Get the status class for a given result.
+     *
+     * @param string $result
+     *
+     * @return string
      */
-    protected function getStatusClass($strResult)
+    protected function getStatusClass(string $result)
     {
         $intStart = null;
-        $arrResponse = explode(' ', $strResult);
+        $arrResponse = explode(' ', $result);
 
         if (is_array($arrResponse) && $arrResponse[1]) {
             $intStart = substr($arrResponse[1], 0, 1);

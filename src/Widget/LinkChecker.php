@@ -39,6 +39,9 @@ class LinkChecker extends Widget
 
     protected $arrLinks = [];
 
+    /**
+     * @return string
+     */
     public function generate()
     {
         if ($this->collect()) {
@@ -46,9 +49,14 @@ class LinkChecker extends Widget
         }
     }
 
-    public function executePreActionsHook($strAction)
+    /**
+     * @param string $action
+     *
+     * @return bool
+     */
+    public function executePreActionsHook(string $action)
     {
-        if ($strAction !== static::LINKCHECKER_TEST_ACTION) {
+        if ($action !== static::LINKCHECKER_TEST_ACTION) {
             return false;
         }
 
@@ -63,6 +71,9 @@ class LinkChecker extends Widget
         $objResponse->output();
     }
 
+    /**
+     * @return string
+     */
     protected function test()
     {
         $objTemplate = new BackendTemplate('be_linkchecker');
@@ -93,6 +104,9 @@ class LinkChecker extends Widget
         return $objTemplate->parse();
     }
 
+    /**
+     * @return bool
+     */
     protected function collect()
     {
         // string
