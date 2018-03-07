@@ -1,0 +1,4 @@
+services:
+  huh.linkchecker.manager.linkchecker:
+    class: HeimrichHannot\LinkCheckerBundle\Manager\LinkChecker
+    public: true

@@ -1,0 +1,19 @@
+<table>
+    <thead>
+    <tr>
+        <th>URL (Hyperlink)</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($this->links as $objLink): ?>
+        <tr>
+            <td class="link">
+                <span title="<?= $objLink->title; ?>" class="url" data-linkchecker="true" data-target="<?= $objLink->target; ?>"
+                      data-url="<?= $objLink->url; ?>"><?= $objLink->text; ?></span>
+            </td>
+            <td class="status" id="<?= $objLink->targetID; ?>"><span class="lc-loading-indicator"></span></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>

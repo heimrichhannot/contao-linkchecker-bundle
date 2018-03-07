@@ -1,0 +1,55 @@
+.linkchecker table {
+  width: 100%;
+  max-width: 100%;
+}
+.linkchecker table > thead > tr > th,
+.linkchecker table > tbody > tr > th,
+.linkchecker table > tfoot > tr > th,
+.linkchecker table > thead > tr > td,
+.linkchecker table > tbody > tr > td,
+.linkchecker table > tfoot > tr > td {
+  padding: 8px;
+  vertical-align: top;
+  border-top: 1px solid #dddddd;
+}
+.linkchecker table > thead > tr > th {
+  vertical-align: bottom;
+  background-color: #f3f3f3;
+}
+.linkchecker table > tbody > tr:last-child > td {
+  border-bottom: 2px solid #dddddd;
+}
+.linkchecker table > caption + thead > tr:first-child > th,
+.linkchecker table > colgroup + thead > tr:first-child > th,
+.linkchecker table > thead:first-child > tr:first-child > th,
+.linkchecker table > caption + thead > tr:first-child > td,
+.linkchecker table > colgroup + thead > tr:first-child > td,
+.linkchecker table > thead:first-child > tr:first-child > td {
+  border-top: 0;
+}
+.linkchecker table > tbody + tbody {
+  border-top: 2px solid #dddddd;
+}
+.linkchecker td.link {
+  width: 50%;
+}
+.linkchecker td.status {
+  width: 50%;
+}
+.linkchecker .lc-loading-indicator {
+  background-image: url('/system/modules/linkchecker/assets/img/loading-indicator-ring.svg');
+  width: 12px;
+  height: 12px;
+  display: block;
+  background-size: cover;
+}
+.linkchecker .lc-status.lc-success {
+  color: #77ac45;
+}
+.linkchecker .lc-status.lc-error {
+  font-weight: bold;
+  color: #cc3333;
+}
+.linkchecker .lc-status.lc-info {
+  color: #4b85ba;
+}

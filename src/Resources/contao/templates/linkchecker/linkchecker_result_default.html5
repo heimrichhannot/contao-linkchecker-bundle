@@ -1,0 +1,1 @@
+<span class="lc-status <?= $this->status; ?>"><?= $this->text ;?></span>

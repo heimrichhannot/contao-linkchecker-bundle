@@ -1,0 +1,5 @@
+
+<h3><?= $this->generateLabel() . $this->xlabel ?></h3>
+<div class="linkchecker">
+    <?= $this->generateWithError(true); ?>
+</div>
