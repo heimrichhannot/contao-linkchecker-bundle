@@ -92,8 +92,7 @@ class LinkChecker
     protected function getResult(string $result)
     {
         $objTemplate = new FrontendTemplate('linkchecker_result_default');
-        $strLabel = $GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$result];
-        $objTemplate->text = $strLabel ?: $result;
+        $objTemplate->text = isset($GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$result]) ? $GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$result] : $result;
         $objTemplate->status = $this->getStatusClass($result);
 
         return $objTemplate->parse();
@@ -111,7 +110,7 @@ class LinkChecker
         $intStart = null;
         $arrResponse = explode(' ', $result);
 
-        if (is_array($arrResponse) && $arrResponse[1]) {
+        if (is_array($arrResponse) && isset($arrResponse[1])) {
             $intStart = substr($arrResponse[1], 0, 1);
         }
 
