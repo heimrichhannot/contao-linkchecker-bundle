@@ -1,21 +1,15 @@
 language: php
-
 git:
   depth: 1
-
 cache:
   directories:
-    - $HOME/.composer/cache
-
+  - "$HOME/.composer/cache"
 sudo: false
-
 env:
   global:
-    - COMPOSER_ALLOW_XDEBUG=0
-
+  - COMPOSER_ALLOW_XDEBUG=0
 matrix:
   include:
-    # Latest dependencies with all PHP versions
     - php: 7.1
       env: CONTAO_VERSION='4.4.*'
     - php: 7.2
@@ -24,19 +18,16 @@ matrix:
       env: CONTAO_VERSION='4.5.*'
     - php: 7.2
       env: CONTAO_VERSION='4.5.*'
-
-    # Generate the coverage with the latest PHP version
     - php: 7.2
-      env: CONTAO_VERSION='4.5.*' COVERAGE='--exclude-group contao3 --coverage-clover build/logs/clover.xml'
+      env: COVERAGE=1 CONTAO_VERSION='4.5.*'
+  allow_failures:
+    - env: COVERAGE=1 DEFAULT=0
   fast_finish: true
-
 before_install:
-  - if [[ ! $COVERAGE ]]; then phpenv config-rm xdebug.ini || true; fi
-
+- if [[ "$COVERAGE" != "1" ]]; then phpenv config-rm xdebug.ini || true; fi
 install:
-  - if [[ "$COMPOSER_FLAGS" == *"--prefer-lowest"* ]]; then composer update --no-interaction --quiet; fi
-  - composer update $COMPOSER_FLAGS --no-interaction --no-suggest
-
+- if [[ "$COMPOSER_FLAGS" == *"--prefer-lowest"* ]]; then composer update --no-interaction --quiet; fi
+- composer update $COMPOSER_FLAGS --no-interaction --no-suggest
 notifications:
   email:
     recipients:
@@ -45,7 +36,7 @@ notifications:
     on_failure: always
   hipchat:
     rooms:
-      secure: mmb9pcAJByTZV/YrbL0pS4lHUboBpEIdTmFw+OZnfOyqa+P2hr/L6hnJ87UpIrXe17PLlxTy1viimVPTxUXTWHS8N6dNJW5C6erqbJUZLvLL5l2rxUHcig2rJ2hiHXv5RzxfM49uqH2zd9FWdgjGoKe1vaTS7RieJIt51mhsPJ29ZMJW3Aj0Inu+cQHrGPb1Mraart7FsU6a7jnJ9i5GdDX8tOOq1Y0Vid94Oi2V+HERgBgFmcUv0443FfrRBWI4asqKpKAS0qqBPkuECb45ewejd2OTwOd+KcWksMFZErUIwtp6LBshYrk8bqhK07SVwgZ5yEBO6+NtcGPE48WV7CzgNJqnyJVt3udU4ck/Y++Sj+Y2F30XU8tPzpu4i5cJYVy9AJCmRnmduMX44Xjr2ovKcAKFCvDls6eC+F2PtFik1jYvaWqG5EnY+ZJH82lB6wo4hzlocmTKvEyfKOQoXhqrxnT5LlrE4ld3uhpnAN4fRrIHHn897gbgoic7wk8uRbPJmNnU2TdowlZDzVvU17IxydUwRgc2OsDxZB4h9s8SOyGEXYe5jtBVunuwo4yjrhEmm/u5q7S18vJuqMmBNdrzf1MBwSYHfKXBKebg7bjQAjVUE7sjCFq8Os3Dnrs446M4owAvdJQ07CDTl29157TuztG7c04cX7vT/3bTlIg=
+      secure: rgKkEZcd1kENwBFU1Paf8j2arSuOw71ew20RH68XlXcHT07ywwgum+/tgIQVLpVI/LHwImVVLdAd3OXJyCgN2+wrl6O++fjvBxvi0mpAb64JcxRgTWguv4JoBDZzvq5SCmDej2hPvCh339b6a4ExGDqRHKjPn2+NKNW/YYaW0mvoun6UTXlErULVJOjiUONG1ePIVXpl3qmA2fye/LJQpBi3AdpSI7bNiv/Xj+LfG6XGjicHcY0Xd1ir0kmFf9lT4jtjcCz0zVjW6XbzdCZLfbnadHcvaDy3yh0ZgWsbEvGDR18BhINGADOs5Zzy4dU1nQqdf0wkp8qMWztJy7dFDhBTFGVPXoFOgv9FVxJLjuRc+u+wA4bPW8iQ2HU5dGFXyqyDUPzwZ9HWX/KNy32Iq9blZSCnw6FeLe09cO9MVB61zjZDcxHpzB2J23c7J/pSVo4+aTZGoMZZmIFNxxpoeNdm1PWpafYRJrxDnJO9nOfjSRWEU3mHudEcYzZAN0Amegp4jK/6I88/auOgln3eVpADAq/s85MbSt8q41y97Zs7peBDOfJm+ZWuBj6/4Ya2S2/vsNtz/RA0yywpdvJ/ZZUHOIKij39iNWkuynqC5/5t5jExcbc4Taay6Mvjixyk7/ibbpYOwpZ54ycBSOjLzMoiyyMKjK7dKCrl+SrsZ70=
 before_script:
 - travis_wait composer install --no-interaction
 script:
