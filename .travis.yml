@@ -49,7 +49,7 @@ notifications:
 before_script:
 - travis_wait composer install --no-interaction
 script:
-  - if [[ $COVERAGE ]]; then mkdir -p build/logs; fi
-  - php vendor/bin/phpunit $COVERAGE
+- if [[ "$COVERAGE" = "1" ]]; then travis_retry mkdir -p build/logs; fi
+- if [[ "$COVERAGE" = "1" ]]; then travis_retry php vendor/bin/phpunit --coverage-clover build/logs/clover.xml || true; fi
 after_script:
-  - if [[ $COVERAGE ]]; then php vendor/bin/coveralls; fi
+- if [[ "$COVERAGE" = "1" ]]; then travis_retry php vendor/bin/php-coveralls -v; fi
