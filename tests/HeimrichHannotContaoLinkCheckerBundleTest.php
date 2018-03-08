@@ -8,18 +8,16 @@
 
 namespace HeimrichHannot\BeExplanationBundle\Tests;
 
+use HeimrichHannot\BeExplanationBundle\DependencyInjection\LinkCheckerExtension;
 use HeimrichHannot\LinkCheckerBundle\HeimrichHannotContaoLinkCheckerBundle;
 use PHPUnit\Framework\TestCase;
 
 class HeimrichHannotContaoLinkCheckerBundleTest extends TestCase
 {
-    /**
-     * Tests the object instantiation.
-     */
-    public function testCanBeInstantiated()
+    public function testGetContainerExtension()
     {
         $bundle = new HeimrichHannotContaoLinkCheckerBundle();
 
-        $this->assertInstanceOf(HeimrichHannotContaoLinkCheckerBundle::class, $bundle);
+        $this->assertInstanceOf(LinkCheckerExtension::class, $bundle->getContainerExtension());
     }
 }

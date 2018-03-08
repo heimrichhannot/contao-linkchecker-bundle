@@ -8,13 +8,16 @@
 
 namespace HeimrichHannot\LinkCheckerBundle;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use HeimrichHannot\BeExplanationBundle\DependencyInjection\LinkCheckerExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class HeimrichHannotContaoLinkCheckerBundle extends Bundle
 {
-    public function build(ContainerBuilder $container)
+    /**
+     * @return LinkCheckerExtension
+     */
+    public function getContainerExtension()
     {
-        parent::build($container);
+        return new LinkCheckerExtension();
     }
 }
