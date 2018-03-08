@@ -8,7 +8,7 @@
 
 namespace HeimrichHannot\BeExplanationBundle\Tests;
 
-use HeimrichHannot\BeExplanationBundle\DependencyInjection\LinkCheckerExtension;
+use HeimrichHannot\LinkCheckerBundle\DependencyInjection\LinkCheckerExtension;
 use HeimrichHannot\LinkCheckerBundle\HeimrichHannotContaoLinkCheckerBundle;
 use PHPUnit\Framework\TestCase;
 

@@ -9,7 +9,7 @@
 namespace HeimrichHannot\UtilsBundle\Tests\DependencyInjection;
 
 use Contao\TestCase\ContaoTestCase;
-use HeimrichHannot\BeExplanationBundle\DependencyInjection\LinkCheckerExtension;
+use HeimrichHannot\LinkCheckerBundle\DependencyInjection\LinkCheckerExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 

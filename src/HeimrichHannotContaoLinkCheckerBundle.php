@@ -8,7 +8,7 @@
 
 namespace HeimrichHannot\LinkCheckerBundle;
 
-use HeimrichHannot\BeExplanationBundle\DependencyInjection\LinkCheckerExtension;
+use HeimrichHannot\LinkCheckerBundle\DependencyInjection\LinkCheckerExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class HeimrichHannotContaoLinkCheckerBundle extends Bundle
