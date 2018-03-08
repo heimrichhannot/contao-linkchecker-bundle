@@ -53,6 +53,9 @@ class LinkCheckerTest extends ContaoTestCase
         $result = $linkChecker->test('https://heimrich-hannot.de/');
         $this->assertSame('<span class="lc-status lc-success">HTTP/1.1 200 OK</span>', $result);
 
+        $result = $linkChecker->test('heimricannot!"§$%&/()=');
+        $this->assertSame('<span class="lc-status lc-default">Ungültige URL, kann nicht geprüft werden.</span>', $result);
+
         $result = $linkChecker->test('mailto:digitales@heimrich-hannot.de');
         $this->assertSame('<span class="lc-status lc-default">E-Mail Adressen werden nicht geprüft.</span>', $result);
 
