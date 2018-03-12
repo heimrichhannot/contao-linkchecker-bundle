@@ -15,7 +15,6 @@ use Contao\Widget;
 use HeimrichHannot\Ajax\Response\ResponseData;
 use HeimrichHannot\Ajax\Response\ResponseSuccess;
 use HeimrichHannot\Haste\Util\Url;
-use HeimrichHannot\Request\Request;
 use Symfony\Component\CssSelector\Exception\SyntaxErrorException;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 
@@ -60,11 +59,11 @@ class LinkChecker extends Widget
             return false;
         }
 
-        if (!Request::hasPost(static::LINKCHECKER_PARAM)) {
+        if (!System::getContainer()->get('huh.request')->hasPost(static::LINKCHECKER_PARAM)) {
             return false;
         }
 
-        $strStatus = System::getContainer()->get('huh.linkchecker.manager.linkchecker')->test(Request::getPost(static::LINKCHECKER_PARAM));
+        $strStatus = System::getContainer()->get('huh.linkchecker.manager.linkchecker')->test(System::getContainer()->get('huh.request')->getPost(static::LINKCHECKER_PARAM));
 
         $objResponse = new ResponseSuccess();
         $objResponse->setResult(new ResponseData($strStatus));
