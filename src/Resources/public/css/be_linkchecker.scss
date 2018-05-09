@@ -1,11 +1,11 @@
 .linkchecker {
 
-  @table-header-background: #f3f3f3;
-  @table-border-color: #dddddd;
-  @table-cell-padding: 8px;
-  @green: rgb(119, 172, 69);
-  @red: #c33;
-  @blue: #4b85ba;
+  $table-header-background: #f3f3f3;
+  $table-border-color: #dddddd;
+  $table-cell-padding: 8px;
+  $green: rgb(119, 172, 69);
+  $red: #c33;
+  $blue: #4b85ba;
 
   table {
     width: 100%;
@@ -17,20 +17,20 @@
       > tr {
         > th,
         > td {
-          padding: @table-cell-padding;
+          padding: $table-cell-padding;
           vertical-align: top;
-          border-top: 1px solid @table-border-color;
+          border-top: 1px solid $table-border-color;
         }
       }
     }
     // Bottom align for column headings
     > thead > tr > th {
       vertical-align: bottom;
-      background-color: @table-header-background;
+      background-color: $table-header-background;
     }
 
     > tbody > tr:last-child > td {
-      border-bottom: 2px solid @table-border-color;
+      border-bottom: 2px solid $table-border-color;
     }
 
     // Remove top border from thead by default
@@ -46,7 +46,7 @@
     }
     // Account for multiple tbody instances
     > tbody + tbody {
-      border-top: 2px solid @table-border-color;
+      border-top: 2px solid $table-border-color;
     }
   }
 
@@ -61,7 +61,7 @@
   }
 
   .lc-loading-indicator {
-    background-image: url('/system/modules/linkchecker/assets/img/loading-indicator-ring.svg');
+    background-image: url('/bundles/heimrichhannotcontaolinkchecker/img/loading-indicator-ring.svg');
     width: 12px;
     height: 12px;
     display: block;
@@ -70,16 +70,16 @@
 
   .lc-status {
     &.lc-success {
-      color: @green;
+      color: $green;
     }
 
     &.lc-error {
       font-weight: bold;
-      color: @red;
+      color: $red;
     }
 
     &.lc-info {
-      color: @blue;
+      color: $blue;
     }
   }
 }

@@ -50,17 +50,15 @@ class LinkChecker extends Widget
 
     /**
      * @param string $action
-     *
-     * @return bool
      */
     public function executePreActionsHook(string $action)
     {
         if ($action !== static::LINKCHECKER_TEST_ACTION) {
-            return false;
+            return;
         }
 
         if (!System::getContainer()->get('huh.request')->hasPost(static::LINKCHECKER_PARAM)) {
-            return false;
+            return;
         }
 
         $strStatus = System::getContainer()->get('huh.linkchecker.manager.linkchecker')->test(System::getContainer()->get('huh.request')->getPost(static::LINKCHECKER_PARAM));
@@ -148,6 +146,10 @@ class LinkChecker extends Widget
      */
     protected function addLinkFromNode(HtmlPageCrawler $node)
     {
+        if (empty($node->attr('href'))) {
+            return;
+        }
+
         $this->arrLinks[] = $node->attr('href');
     }
 }

@@ -16,11 +16,10 @@ $GLOBALS['BE_FFL']['linkChecker'] = 'HeimrichHannot\LinkCheckerBundle\Widget\Lin
 /**
  * Assets
  */
-$GLOBALS['TL_JAVASCRIPT']['promise-polyfill'] = 'system/modules/linkchecker/assets/vendor/promise-polyfill/promise.min.js|static';
-$GLOBALS['TL_JAVASCRIPT']['linkchecker']      = 'system/modules/linkchecker/assets/js/linkchecker.min.js|static';
+$GLOBALS['TL_JAVASCRIPT']['linkchecker']      = 'bundles/heimrichhannotcontaolinkchecker/js/linkchecker.min.js|static';
 
-if (TL_MODE == 'BE') {
-    $GLOBALS['TL_CSS']['linkchecker'] = 'system/modules/linkchecker/assets/css/be_linkchecker.min.css|static';
+if (System::getContainer()->get('huh.utils.container')->isBackend()) {
+    $GLOBALS['TL_CSS']['linkchecker'] = 'bundles/heimrichhannotcontaolinkchecker/css/be_linkchecker.min.css|static';
 }
 
 /**

@@ -1,0 +1,7 @@
+huh:
+    encore:
+        entries:
+            - { name: contao-linkchecker-bundle, file: 'vendor/heimrichhannot/contao-linkchecker-bundle/src/Resources/public/js/contao-linkchecker-bundle.es6.js' }
+        legacy:
+            js:
+                - linkchecker

@@ -1,7 +1,8 @@
-/vendor
 .idea
-composer.lock
 Thumbs.db
 .DS_Store
 .sass-cache
-component
+vendor
+composer.lock
+composer.json~
+composer.phar
