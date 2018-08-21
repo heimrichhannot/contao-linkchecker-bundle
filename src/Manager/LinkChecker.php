@@ -16,7 +16,7 @@ class LinkChecker
 {
     const STATUS_MAILTO = 'mailto';
     const STATUS_INVALID = 'invalid';
-    const STATUS_TIMEOUT = 'HTTP/1.0 408 Request Timeout';
+    const STATUS_TIMEOUT = '408';
 
     const CLASS_DEFAULT = 'lc-default';
     const CLASS_INFO = 'lc-info';
@@ -56,8 +56,10 @@ class LinkChecker
             return $this->getResult(static::STATUS_INVALID);
         }
 
-        if ($arrHeaders = @get_headers($url)) {
-            return $this->getResult($arrHeaders[0]);
+        list($headers, $body) = System::getContainer()->get('huh.utils.request.curl')->request($url, [], true);
+
+        if (is_array($headers)) {
+            return $this->getResult($headers['http_code']);
         }
 
         return $this->getResult(static::STATUS_TIMEOUT);
@@ -91,8 +93,20 @@ class LinkChecker
      */
     protected function getResult(string $result)
     {
+        $curlUtil = System::getContainer()->get('huh.utils.request.curl');
+
         $objTemplate = new FrontendTemplate('linkchecker_result_default');
-        $objTemplate->text = isset($GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$result]) ? $GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$result] : $result;
+
+        $text = $result;
+
+        if (isset($GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$result])) {
+            $text = $GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$result];
+        } elseif ($curlUtil::HTTP_STATUS_CODE_MESSAGES[$result]) {
+            $text = $curlUtil::HTTP_STATUS_CODE_MESSAGES[$result].' (Statuscode: '.$result.')';
+        }
+
+        $objTemplate->text = $text;
+
         $objTemplate->status = $this->getStatusClass($result);
 
         return $objTemplate->parse();
@@ -101,17 +115,16 @@ class LinkChecker
     /**
      * Get the status class for a given result.
      *
-     * @param string $result
+     * @param string $statusCode
      *
      * @return string
      */
-    protected function getStatusClass(string $result)
+    protected function getStatusClass(string $statusCode)
     {
         $intStart = null;
-        $arrResponse = explode(' ', $result);
 
-        if (is_array($arrResponse) && isset($arrResponse[1])) {
-            $intStart = substr($arrResponse[1], 0, 1);
+        if (strlen($statusCode) > 0) {
+            $intStart = substr($statusCode, 0, 1);
         }
 
         switch ($intStart) {
