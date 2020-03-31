@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.1.1] - 2020-03-31
+- fixed wrong class used in service definition
+- 
+
 ## [2.1.0] - 2020-03-31
 - updated url handling for contao 4
 - updated dependencies for contao 4.9

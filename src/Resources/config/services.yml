@@ -2,7 +2,7 @@ services:
   huh.linkchecker.manager.linkchecker:
     class: HeimrichHannot\LinkCheckerBundle\Manager\LinkChecker
     public: true
-  HeimrichHannot\LinkCheckerBundle\Widget\LinkChecker: '@huh.linkchecker.manager.linkchecker'
+  HeimrichHannot\LinkCheckerBundle\Manager\LinkChecker: '@huh.linkchecker.manager.linkchecker'
 
   HeimrichHannot\LinkCheckerBundle\EventListener\ExecutePreActionsListener:
     autowire: true
