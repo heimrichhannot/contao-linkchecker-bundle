@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2018 Heimrich & Hannot GmbH
+ * Copyright (c) 2020 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
  */
@@ -42,7 +42,7 @@ class LinkCheckerWidget extends Widget
     public function generate()
     {
         $GLOBALS['TL_JAVASCRIPT']['linkchecker'] = 'bundles/heimrichhannotcontaolinkchecker/js/linkchecker.min.js|static';
-        $GLOBALS['TL_CSS']['linkchecker']        = 'bundles/heimrichhannotcontaolinkchecker/css/be_linkchecker.min.css|static';
+        $GLOBALS['TL_CSS']['linkchecker'] = 'bundles/heimrichhannotcontaolinkchecker/css/be_linkchecker.min.css|static';
 
         if ($this->collect()) {
             return $this->test();
@@ -62,8 +62,7 @@ class LinkCheckerWidget extends Widget
         $arrLinks = [];
 
         // Display the pages
-        for ($i = 0, $c = count($this->arrLinks); $i < $c; ++$i) {
-
+        for ($i = 0, $c = \count($this->arrLinks); $i < $c; ++$i) {
             $url = $routing->generateBackendRoute(['action' => static::LINKCHECKER_TEST_ACTION, static::LINKCHECKER_PARAM => $this->arrLinks[$i]]);
             $url = Environment::get('url').$url;
 
@@ -92,7 +91,7 @@ class LinkCheckerWidget extends Widget
         $this->arrLinks = $this->value;
 
         // array
-        if (is_array($this->value)) {
+        if (\is_array($this->value)) {
             $this->arrLinks = $this->value;
 
             return true;

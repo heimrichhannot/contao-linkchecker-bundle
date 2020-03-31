@@ -1,16 +1,12 @@
 <?php
-/**
- * Contao Open Source CMS
- *
+
+/*
  * Copyright (c) 2020 Heimrich & Hannot GmbH
  *
- * @author  Thomas Körner <t.koerner@heimrich-hannot.de>
- * @license http://www.gnu.org/licences/lgpl-3.0.html LGPL
+ * @license LGPL-3.0-or-later
  */
 
-
 namespace HeimrichHannot\LinkCheckerBundle\EventListener;
-
 
 use HeimrichHannot\AjaxBundle\Response\ResponseData;
 use HeimrichHannot\AjaxBundle\Response\ResponseSuccess;
@@ -43,7 +39,7 @@ class ExecutePreActionsListener
      */
     public function onExecutePreActions(string $action): void
     {
-        if ($action !== LinkCheckerWidget::LINKCHECKER_TEST_ACTION) {
+        if (LinkCheckerWidget::LINKCHECKER_TEST_ACTION !== $action) {
             return;
         }
 

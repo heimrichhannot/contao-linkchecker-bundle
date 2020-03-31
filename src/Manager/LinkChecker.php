@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2018 Heimrich & Hannot GmbH
+ * Copyright (c) 2020 Heimrich & Hannot GmbH
  *
  * @license LGPL-3.0-or-later
  */
@@ -32,7 +32,7 @@ class LinkChecker
      */
     public function test($varLinks)
     {
-        if (!is_array($varLinks)) {
+        if (!\is_array($varLinks)) {
             return $this->testOne($varLinks);
         }
 
@@ -58,7 +58,7 @@ class LinkChecker
 
         list($headers, $body) = System::getContainer()->get('huh.utils.request.curl')->request($url, [], true);
 
-        if (is_array($headers)) {
+        if (\is_array($headers)) {
             return $this->getResult($headers['http_code']);
         }
 
@@ -123,7 +123,7 @@ class LinkChecker
     {
         $intStart = null;
 
-        if (strlen($statusCode) > 0) {
+        if (\strlen($statusCode) > 0) {
             $intStart = substr($statusCode, 0, 1);
         }
 
