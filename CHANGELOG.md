@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2020-03-31
+- updated url handling for contao 4
+- updated dependencies for contao 4.9
+- updated config for encore bundle
+- some code refactoring
+
 ## [2.0.1] - 2018-08-21
 
 ### Changed

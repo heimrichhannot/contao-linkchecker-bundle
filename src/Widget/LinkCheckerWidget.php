@@ -9,16 +9,14 @@
 namespace HeimrichHannot\LinkCheckerBundle\Widget;
 
 use Contao\BackendTemplate;
+use Contao\Environment;
 use Contao\StringUtil;
 use Contao\System;
 use Contao\Widget;
-use HeimrichHannot\Ajax\Response\ResponseData;
-use HeimrichHannot\Ajax\Response\ResponseSuccess;
-use HeimrichHannot\Haste\Util\Url;
 use Symfony\Component\CssSelector\Exception\SyntaxErrorException;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 
-class LinkChecker extends Widget
+class LinkCheckerWidget extends Widget
 {
     const LINKCHECKER_PARAM = 'lc'; // The param within the url, that holds the test url
     const LINKCHECKER_TEST_ACTION = 'lc-test'; // The back end action, required for ajax request
@@ -43,29 +41,12 @@ class LinkChecker extends Widget
      */
     public function generate()
     {
+        $GLOBALS['TL_JAVASCRIPT']['linkchecker'] = 'bundles/heimrichhannotcontaolinkchecker/js/linkchecker.min.js|static';
+        $GLOBALS['TL_CSS']['linkchecker']        = 'bundles/heimrichhannotcontaolinkchecker/css/be_linkchecker.min.css|static';
+
         if ($this->collect()) {
             return $this->test();
         }
-    }
-
-    /**
-     * @param string $action
-     */
-    public function executePreActionsHook(string $action)
-    {
-        if ($action !== static::LINKCHECKER_TEST_ACTION) {
-            return;
-        }
-
-        if (!System::getContainer()->get('huh.request')->hasPost(static::LINKCHECKER_PARAM)) {
-            return;
-        }
-
-        $strStatus = System::getContainer()->get('huh.linkchecker.manager.linkchecker')->test(System::getContainer()->get('huh.request')->getPost(static::LINKCHECKER_PARAM));
-
-        $objResponse = new ResponseSuccess();
-        $objResponse->setResult(new ResponseData($strStatus));
-        $objResponse->output();
     }
 
     /**
@@ -73,6 +54,7 @@ class LinkChecker extends Widget
      */
     protected function test()
     {
+        $routing = System::getContainer()->get('huh.utils.routing');
         $objTemplate = new BackendTemplate('be_linkchecker');
 
         $rand = rand();
@@ -81,12 +63,12 @@ class LinkChecker extends Widget
 
         // Display the pages
         for ($i = 0, $c = count($this->arrLinks); $i < $c; ++$i) {
-            $strUrl = Url::addQueryString('REQUEST_TOKEN='.\RequestToken::get(), 'contao/main.php');
-            $strUrl = Url::addQueryString('action='.static::LINKCHECKER_TEST_ACTION, $strUrl);
-            $strUrl = Url::addQueryString(static::LINKCHECKER_PARAM.'='.$this->arrLinks[$i], $strUrl);
+
+            $url = $routing->generateBackendRoute(['action' => static::LINKCHECKER_TEST_ACTION, static::LINKCHECKER_PARAM => $this->arrLinks[$i]]);
+            $url = Environment::get('url').$url;
 
             $objLink = new \stdClass();
-            $objLink->url = urldecode($strUrl);
+            $objLink->url = urldecode($url);
             $objLink->title = $this->arrLinks[$i];
             $objLink->testUrl = $this->arrLinks[$i].'#'.$rand.$i;
             $objLink->targetID = 'lc-'.$rand.$i;

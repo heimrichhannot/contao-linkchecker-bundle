@@ -9,7 +9,7 @@
 namespace HeimrichHannot\LinkCheckerBundle\Tests\Widget;
 
 use Contao\TestCase\ContaoTestCase;
-use HeimrichHannot\LinkCheckerBundle\Widget\LinkChecker;
+use HeimrichHannot\LinkCheckerBundle\Widget\LinkCheckerWidget;
 
 class LinkCheckerTest extends ContaoTestCase
 {
@@ -20,7 +20,7 @@ class LinkCheckerTest extends ContaoTestCase
 
     public function testGenerate()
     {
-        $widget = new LinkChecker();
+        $widget = new LinkCheckerWidget();
 
         $result = $widget->generate();
         $this->assertNull($result);
