@@ -61,7 +61,6 @@ class LinkCheckerWidget extends Widget
 
         $arrLinks = [];
 
-        // Display the pages
         for ($i = 0, $c = \count($this->arrLinks); $i < $c; ++$i) {
             $url = $routing->generateBackendRoute(['action' => static::LINKCHECKER_TEST_ACTION, static::LINKCHECKER_PARAM => $this->arrLinks[$i]]);
             $url = Environment::get('url').$url;
@@ -117,13 +116,11 @@ class LinkCheckerWidget extends Widget
             }
         }
 
-        return !empty($this->arrLinks);
+        return \is_array($this->arrLinks) && !empty($this->arrLinks);
     }
 
     /**
      * Add links from node to test list.
-     *
-     * @param HtmlPageCrawler $node
      */
     protected function addLinkFromNode(HtmlPageCrawler $node)
     {

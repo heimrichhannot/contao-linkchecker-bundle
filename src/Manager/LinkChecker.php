@@ -115,8 +115,6 @@ class LinkChecker
     /**
      * Get the status class for a given result.
      *
-     * @param string $statusCode
-     *
      * @return string
      */
     protected function getStatusClass(string $statusCode)

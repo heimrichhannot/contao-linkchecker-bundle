@@ -66,9 +66,6 @@ class PluginTest extends ContaoTestCase
     /**
      * Mocks the plugin loader.
      *
-     * @param Invocation $expects
-     * @param array      $plugins
-     *
      * @return PluginLoader|\PHPUnit_Framework_MockObject_MockObject
      */
     private function mockPluginLoader(Invocation $expects, array $plugins = [])
