@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.2.0] - 2022-01-13
+- Changed: allow wa72/htmlpagedom v2
+
 ## [2.1.2] - 2020-10-20
 - fixed error if no links have been found
 
