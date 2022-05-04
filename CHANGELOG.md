@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2022-05-04
+- Changed: allow symfony 5
+
 ## [2.3.0] - 2022-03-07
 - Changed: allow php 8
 
