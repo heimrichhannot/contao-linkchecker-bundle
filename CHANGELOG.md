@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.5.1] - 2024-02-15
+- Fixed: encore entry not registered
+
 ## [2.5.0] - 2024-02-15
 - Changed: migrated to encore contracts
 - Changed: raised minimum dependencies for contao to 4.9 and php to 7.4

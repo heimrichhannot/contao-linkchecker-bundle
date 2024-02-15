@@ -5,6 +5,9 @@ services:
     autowire: true
   HeimrichHannot\LinkCheckerBundle\Manager\LinkChecker: '@huh.linkchecker.manager.linkchecker'
 
-  HeimrichHannot\LinkCheckerBundle\EventListener\ExecutePreActionsListener:
+
+
+  HeimrichHannot\LinkCheckerBundle\:
+    resource: '../../{Asset,EventListener}/*'
     autowire: true
-    public: true
+    autoconfigure: true
