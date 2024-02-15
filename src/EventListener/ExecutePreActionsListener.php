@@ -12,26 +12,20 @@ use HeimrichHannot\AjaxBundle\Response\ResponseData;
 use HeimrichHannot\AjaxBundle\Response\ResponseSuccess;
 use HeimrichHannot\LinkCheckerBundle\Manager\LinkChecker as LinkCheckerManager;
 use HeimrichHannot\LinkCheckerBundle\Widget\LinkCheckerWidget;
-use HeimrichHannot\RequestBundle\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ExecutePreActionsListener
 {
-    /**
-     * @var LinkCheckerWidget
-     */
-    private $linkChecker;
-    /**
-     * @var Request
-     */
-    private $request;
+    private LinkCheckerManager $linkChecker;
+    private RequestStack $requestStack;
 
     /**
      * ExecutePreActionsListener constructor.
      */
-    public function __construct(Request $request, LinkCheckerManager $linkChecker)
+    public function __construct(LinkCheckerManager $linkChecker, RequestStack $requestStack)
     {
         $this->linkChecker = $linkChecker;
-        $this->request = $request;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -43,11 +37,12 @@ class ExecutePreActionsListener
             return;
         }
 
-        if (!$this->request->hasPost(LinkCheckerWidget::LINKCHECKER_PARAM)) {
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request->request->has(LinkCheckerWidget::LINKCHECKER_PARAM)) {
             return;
         }
 
-        $strStatus = $this->linkChecker->test($this->request->getPost(LinkCheckerWidget::LINKCHECKER_PARAM));
+        $strStatus = $this->linkChecker->test($request->request->get(LinkCheckerWidget::LINKCHECKER_PARAM));
 
         $objResponse = new ResponseSuccess();
         $objResponse->setResult(new ResponseData($strStatus));
