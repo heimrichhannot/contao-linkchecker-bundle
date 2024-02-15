@@ -13,11 +13,12 @@ use Contao\PageModel;
 use Contao\System;
 use Contao\TestCase\ContaoTestCase;
 use HeimrichHannot\LinkCheckerBundle\Manager\LinkChecker;
+use HeimrichHannot\UtilsBundle\Request\CurlRequestUtil;
 use HeimrichHannot\UtilsBundle\String\StringUtil;
 
 class LinkCheckerTest extends ContaoTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -35,12 +36,13 @@ class LinkCheckerTest extends ContaoTestCase
             \HeimrichHannot\LinkCheckerBundle\Manager\LinkChecker::STATUS_TIMEOUT => 'HTTP/1.0 408 Request Time-out',
         ];
 
-        $resourceFinder = new ResourceFinder([__DIR__.'/../../src', __DIR__.'/../../src/Resources/contao']);
+        System::setContainer($this->getContainerWithContaoConfiguration());
+    }
 
-        $container = $this->mockContainer();
-        $container->set('huh.utils.string', new StringUtil($this->mockContaoFramework()));
-        $container->set('contao.resource_finder', $resourceFinder);
-        System::setContainer($container);
+    private function createInstance()
+    {
+        $curlUtil = $this->createMock(CurlRequestUtil::class);
+        return new LinkChecker($curlUtil);
     }
 
     public function testTest()
@@ -49,7 +51,7 @@ class LinkCheckerTest extends ContaoTestCase
 
         $objPage = $this->mockClassWithProperties(PageModel::class, ['outputFormat' => '']);
 
-        $linkChecker = new LinkChecker();
+        $linkChecker = $this->createInstance();
         $result = $linkChecker->test('https://heimrich-hannot.de/');
         $this->assertSame('<span class="lc-status lc-success">HTTP/1.1 200 OK</span>', $result);
 

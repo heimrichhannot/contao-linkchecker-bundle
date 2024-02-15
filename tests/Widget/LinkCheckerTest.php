@@ -8,18 +8,17 @@
 
 namespace HeimrichHannot\LinkCheckerBundle\Tests\Widget;
 
+use Contao\System;
 use Contao\TestCase\ContaoTestCase;
 use HeimrichHannot\LinkCheckerBundle\Widget\LinkCheckerWidget;
 
 class LinkCheckerTest extends ContaoTestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
     public function testGenerate()
     {
+        $container = $this->getContainerWithContaoConfiguration();
+        System::setContainer($container);
+
         $widget = new LinkCheckerWidget();
 
         $result = $widget->generate();
