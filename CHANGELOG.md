@@ -1,8 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - 2024-02-15
+## [2.5.0] - 2024-02-15
 - Changed: migrated to encore contracts
+- Changed: raised minimum dependencies for contao to 4.9 and php to 7.4
+- Changed: some code refactoring and cleanup
 
 ## [2.4.0] - 2022-05-05
 - Changed: allow symfony 5

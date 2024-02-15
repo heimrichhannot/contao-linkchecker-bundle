@@ -35,7 +35,7 @@ class LinkCheckerWidget extends Widget
      */
     protected $strTemplate = 'be_linkchecker_widget';
 
-    protected array $arrLinks = [];
+    protected $arrLinks = [];
 
     public function generate(): string
     {
