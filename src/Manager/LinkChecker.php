@@ -9,8 +9,8 @@
 namespace HeimrichHannot\LinkCheckerBundle\Manager;
 
 use Contao\FrontendTemplate;
-use Contao\System;
 use Contao\Validator;
+use HeimrichHannot\UtilsBundle\Request\CurlRequestUtil;
 
 class LinkChecker
 {
@@ -22,6 +22,13 @@ class LinkChecker
     const CLASS_INFO = 'lc-info';
     const CLASS_SUCCESS = 'lc-success';
     const CLASS_ERROR = 'lc-error';
+
+    private CurlRequestUtil $curlRequestUtil;
+
+    public function __construct(CurlRequestUtil $curlRequestUtil)
+    {
+        $this->curlRequestUtil = $curlRequestUtil;
+    }
 
     /**
      * Test a given link, or all links that has been added with add().
@@ -42,13 +49,13 @@ class LinkChecker
     /**
      * Test a single url.
      *
-     * @param string $strUrl The url
+     * @param string $url The url
      *
-     * @return bool|mixed The translated status code, or false if the link was not tested
+     * @return string The translated status code, or false if the link was not tested
      */
-    protected function testOne(string $url)
+    protected function testOne(string $url): string
     {
-        if (System::getContainer()->get('huh.utils.string')->startsWith($url, 'mailto:')) {
+        if (str_starts_with($url, 'mailto:')) {
             return $this->getResult(static::STATUS_MAILTO);
         }
 
@@ -56,7 +63,7 @@ class LinkChecker
             return $this->getResult(static::STATUS_INVALID);
         }
 
-        list($headers, $body) = System::getContainer()->get('huh.utils.request.curl')->request($url, [], true);
+        list($headers, $body) = $this->curlRequestUtil->request($url, [], true);
 
         if (\is_array($headers)) {
             return $this->getResult($headers['http_code']);
@@ -72,7 +79,7 @@ class LinkChecker
      *
      * @return array The  list of tested links with translated status code, or false if the link was not tested
      */
-    protected function testAll(array $arrLinks)
+    protected function testAll(array $arrLinks): array
     {
         $arrResults = [];
 
@@ -86,23 +93,17 @@ class LinkChecker
 
     /**
      * Get the styled result.
-     *
-     * @param $strResult
-     *
-     * @return mixed
      */
-    protected function getResult(string $result)
+    protected function getResult(string $result): string
     {
-        $curlUtil = System::getContainer()->get('huh.utils.request.curl');
-
         $objTemplate = new FrontendTemplate('linkchecker_result_default');
 
         $text = $result;
 
         if (isset($GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$result])) {
             $text = $GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$result];
-        } elseif ($curlUtil::HTTP_STATUS_CODE_MESSAGES[$result]) {
-            $text = $curlUtil::HTTP_STATUS_CODE_MESSAGES[$result].' (Statuscode: '.$result.')';
+        } elseif (CurlRequestUtil::HTTP_STATUS_CODE_MESSAGES[$result]) {
+            $text = CurlRequestUtil::HTTP_STATUS_CODE_MESSAGES[$result].' (Statuscode: '.$result.')';
         }
 
         $objTemplate->text = $text;
@@ -114,10 +115,8 @@ class LinkChecker
 
     /**
      * Get the status class for a given result.
-     *
-     * @return string
      */
-    protected function getStatusClass(string $statusCode)
+    protected function getStatusClass(string $statusCode): string
     {
         $intStart = null;
 
@@ -127,18 +126,17 @@ class LinkChecker
 
         switch ($intStart) {
             //1xx Informational
+            //3xx Redirection
             case '1':
+            case '3':
                 return static::CLASS_INFO;
             //2xx Success
             case '2':
                 return static::CLASS_SUCCESS;
-            //3xx Redirection
-            case '3':
-                return static::CLASS_INFO;
-            //4xx Client Error
+
+            // 4xx Client Error
+            // 5xx Server Error
             case '4':
-                return static::CLASS_ERROR;
-            //5xx Server Error
             case '5':
                 return static::CLASS_ERROR;
         }

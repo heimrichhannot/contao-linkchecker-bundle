@@ -13,6 +13,7 @@ use Contao\Environment;
 use Contao\StringUtil;
 use Contao\System;
 use Contao\Widget;
+use HeimrichHannot\UtilsBundle\Util\Utils;
 use Symfony\Component\CssSelector\Exception\SyntaxErrorException;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
 
@@ -34,12 +35,9 @@ class LinkCheckerWidget extends Widget
      */
     protected $strTemplate = 'be_linkchecker_widget';
 
-    protected $arrLinks = [];
+    protected array $arrLinks = [];
 
-    /**
-     * @return string
-     */
-    public function generate()
+    public function generate(): string
     {
         $GLOBALS['TL_JAVASCRIPT']['linkchecker'] = 'bundles/heimrichhannotcontaolinkchecker/js/linkchecker.min.js|static';
         $GLOBALS['TL_CSS']['linkchecker'] = 'bundles/heimrichhannotcontaolinkchecker/css/be_linkchecker.min.css|static';
@@ -47,14 +45,12 @@ class LinkCheckerWidget extends Widget
         if ($this->collect()) {
             return $this->test();
         }
+
+        return '';
     }
 
-    /**
-     * @return string
-     */
-    protected function test()
+    protected function test(): string
     {
-        $routing = System::getContainer()->get('huh.utils.routing');
         $objTemplate = new BackendTemplate('be_linkchecker');
 
         $rand = rand();
@@ -62,7 +58,9 @@ class LinkCheckerWidget extends Widget
         $arrLinks = [];
 
         for ($i = 0, $c = \count($this->arrLinks); $i < $c; ++$i) {
-            $url = $routing->generateBackendRoute(['action' => static::LINKCHECKER_TEST_ACTION, static::LINKCHECKER_PARAM => $this->arrLinks[$i]]);
+            $url = System::getContainer()->get(Utils::class)->routing()->generateBackendRoute(
+                ['action' => static::LINKCHECKER_TEST_ACTION, static::LINKCHECKER_PARAM => $this->arrLinks[$i]]
+            );
             $url = Environment::get('url').$url;
 
             $objLink = new \stdClass();
@@ -81,10 +79,7 @@ class LinkCheckerWidget extends Widget
         return $objTemplate->parse();
     }
 
-    /**
-     * @return bool
-     */
-    protected function collect()
+    protected function collect(): bool
     {
         // string
         $this->arrLinks = $this->value;
@@ -110,7 +105,7 @@ class LinkCheckerWidget extends Widget
                 // container
                 $objCrawler->filter('a[href]')->each(function ($node, $i) {
                     /* @var $node  HtmlPageCrawler */
-                    return $this->addLinkFromNode($node);
+                    $this->addLinkFromNode($node);
                 });
             } catch (SyntaxErrorException $e) {
             }

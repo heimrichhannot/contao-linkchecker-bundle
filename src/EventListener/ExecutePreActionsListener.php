@@ -8,6 +8,7 @@
 
 namespace HeimrichHannot\LinkCheckerBundle\EventListener;
 
+use Contao\CoreBundle\ServiceAnnotation\Hook;
 use HeimrichHannot\AjaxBundle\Response\ResponseData;
 use HeimrichHannot\AjaxBundle\Response\ResponseSuccess;
 use HeimrichHannot\LinkCheckerBundle\Manager\LinkChecker as LinkCheckerManager;

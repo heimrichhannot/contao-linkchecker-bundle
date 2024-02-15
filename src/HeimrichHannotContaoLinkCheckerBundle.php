@@ -13,10 +13,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class HeimrichHannotContaoLinkCheckerBundle extends Bundle
 {
-    /**
-     * @return LinkCheckerExtension
-     */
-    public function getContainerExtension()
+    public function getContainerExtension(): LinkCheckerExtension
     {
         return new LinkCheckerExtension();
     }
