@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2024-02-15
+- Changed: migrated to encore contracts
+
 ## [2.4.0] - 2022-05-05
 - Changed: allow symfony 5
 

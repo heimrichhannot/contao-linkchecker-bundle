@@ -17,7 +17,7 @@ use Contao\ManagerPlugin\Config\ExtensionPluginInterface;
 use HeimrichHannot\LinkCheckerBundle\HeimrichHannotContaoLinkCheckerBundle;
 use HeimrichHannot\UtilsBundle\Container\ContainerUtil;
 
-class Plugin implements BundlePluginInterface, ExtensionPluginInterface
+class Plugin implements BundlePluginInterface
 {
     /**
      * {@inheritdoc}
@@ -25,20 +25,8 @@ class Plugin implements BundlePluginInterface, ExtensionPluginInterface
     public function getBundles(ParserInterface $parser)
     {
         return [
-            BundleConfig::create(HeimrichHannotContaoLinkCheckerBundle::class)->setLoadAfter([ContaoCoreBundle::class]),
+            BundleConfig::create(HeimrichHannotContaoLinkCheckerBundle::class)
+                ->setLoadAfter([ContaoCoreBundle::class]),
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getExtensionConfig($extensionName, array $extensionConfigs, ContainerBuilder $container)
-    {
-        return ContainerUtil::mergeConfigFile(
-            'huh_encore',
-            $extensionName,
-            $extensionConfigs,
-            __DIR__.'/../Resources/config/config_encore.yml'
-        );
     }
 }
