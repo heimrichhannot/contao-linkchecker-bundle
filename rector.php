@@ -13,7 +13,6 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRect
 return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/src',
-        __DIR__ . '/tests',
 //        __DIR__ . '/contao',
 
     ])
@@ -29,7 +28,6 @@ return RectorConfig::configure()
     )
     ->withComposerBased(
         doctrine: true,
-        phpunit: true,
         symfony: true,
     )
     ->withSets([
