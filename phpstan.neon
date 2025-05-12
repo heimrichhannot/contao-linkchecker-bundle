@@ -1,10 +1,11 @@
 parameters:
-  level: 1
+  level: 3
   paths:
     - src
 #    - contao
-#  universalObjectCratesClasses:
-#    - Contao\Model
+  universalObjectCratesClasses:
+    - Contao\FrontendTemplate
+    - Contao\BackendTemplate
 #    - Contao\Template
 includes:
   - vendor/phpstan/phpstan-symfony/extension.neon
