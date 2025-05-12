@@ -16,19 +16,18 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class LinkChecker
 {
-    const STATUS_MAILTO = 'mailto';
-    const STATUS_INVALID = 'invalid';
-    const STATUS_TIMEOUT = '408';
+    public const STATUS_MAILTO = 'mailto';
+    public const STATUS_INVALID = 'invalid';
+    public const STATUS_TIMEOUT = '408';
 
-    const CLASS_DEFAULT = 'lc-default';
-    const CLASS_INFO = 'lc-info';
-    const CLASS_SUCCESS = 'lc-success';
-    const CLASS_ERROR = 'lc-error';
+    public const CLASS_DEFAULT = 'lc-default';
+    public const CLASS_INFO = 'lc-info';
+    public const CLASS_SUCCESS = 'lc-success';
+    public const CLASS_ERROR = 'lc-error';
 
     public function __construct(
         private readonly HttpClientInterface $client,
-    )
-    {
+    ) {
     }
 
     /**
@@ -100,11 +99,8 @@ class LinkChecker
         if (isset($GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$result])) {
             $text = $GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$result];
         } elseif (isset(Response::$statusTexts[$result])) {
-            $text = Response::$statusTexts[$result].' (Statuscode: '.$result.')';
+            $text = Response::$statusTexts[$result] . ' (Statuscode: ' . $result . ')';
         }
-
-
-
 
         $objTemplate->text = $text;
 
@@ -123,6 +119,7 @@ class LinkChecker
         if (\strlen($statusCode) > 0) {
             $intStart = substr($statusCode, 0, 1);
         }
+
         return match ($intStart) {
             '1', '3' => static::CLASS_INFO,
             '2' => static::CLASS_SUCCESS,

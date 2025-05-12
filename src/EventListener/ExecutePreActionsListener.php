@@ -17,11 +17,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ExecutePreActionsListener
 {
-    /**
-     * ExecutePreActionsListener constructor.
-     */
-    public function __construct(private LinkCheckerManager $linkChecker, private RequestStack $requestStack)
-    {
+    public function __construct(
+        private LinkCheckerManager $linkChecker,
+        private RequestStack $requestStack,
+    ) {
     }
 
     #[AsHook('executePreActions')]
