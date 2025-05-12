@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.6.0] - 2024-05-15
+- Changed: allow contao 5
+- Changed: require php 8
+- Changed: require at least contao 4.13
+
 ## [2.5.1] - 2024-02-15
 - Fixed: encore entry not registered
 
