@@ -8,6 +8,7 @@
 
 namespace HeimrichHannot\LinkCheckerBundle\Manager;
 
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendTemplate;
 use Contao\Validator;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,6 +28,7 @@ class LinkChecker
 
     public function __construct(
         private readonly HttpClientInterface $client,
+        private readonly ContaoFramework $contaoFramework,
     ) {
     }
 
@@ -92,7 +94,10 @@ class LinkChecker
      */
     protected function getResult(string $result): string
     {
-        $objTemplate = new FrontendTemplate('linkchecker_result_default');
+        $objTemplate = $this->contaoFramework->createInstance(
+            FrontendTemplate::class,
+            ['linkchecker_result_default']
+        );
 
         $text = $result;
 

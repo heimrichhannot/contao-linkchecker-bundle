@@ -27,11 +27,7 @@
     "wa72/htmlpagedom": "^1.3 || ^2.0 || ^3.0"
   },
   "require-dev": {
-    "contao/test-case": "^2.0 || ^3.0 || ^4.0",
     "contao/manager-plugin": "^2.13",
-    "phpunit/phpunit": "^8.0 || ^9.0",
-    "php-coveralls/php-coveralls": "^2.7",
-    "symfony/phpunit-bridge": "^3.2",
     "rector/rector": "^2.0",
     "contao/contao-rector": "dev-main",
     "symplify/easy-coding-standard": "^12.5",
@@ -41,19 +37,6 @@
   "autoload": {
     "psr-4": {
       "HeimrichHannot\\LinkCheckerBundle\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "HeimrichHannot\\LinkCheckerBundle\\Test\\": "tests/"
-    }
-  },
-  "config": {
-    "preferred-install": "dist",
-    "allow-plugins": {
-      "contao-components/installer": true,
-      "php-http/discovery": false,
-      "contao/manager-plugin": true
     }
   },
   "extra": {
