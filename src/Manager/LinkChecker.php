@@ -10,7 +10,9 @@ namespace HeimrichHannot\LinkCheckerBundle\Manager;
 
 use Contao\FrontendTemplate;
 use Contao\Validator;
-use HeimrichHannot\UtilsBundle\Request\CurlRequestUtil;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class LinkChecker
 {
@@ -23,11 +25,10 @@ class LinkChecker
     const CLASS_SUCCESS = 'lc-success';
     const CLASS_ERROR = 'lc-error';
 
-    private CurlRequestUtil $curlRequestUtil;
-
-    public function __construct(CurlRequestUtil $curlRequestUtil)
+    public function __construct(
+        private readonly HttpClientInterface $client,
+    )
     {
-        $this->curlRequestUtil = $curlRequestUtil;
     }
 
     /**
@@ -63,13 +64,9 @@ class LinkChecker
             return $this->getResult(static::STATUS_INVALID);
         }
 
-        list($headers, $body) = $this->curlRequestUtil->request($url, [], true);
+        $response = $this->client->request(Request::METHOD_GET, $url);
 
-        if (\is_array($headers)) {
-            return $this->getResult($headers['http_code']);
-        }
-
-        return $this->getResult(static::STATUS_TIMEOUT);
+        return $this->getResult($response->getStatusCode());
     }
 
     /**
@@ -102,9 +99,12 @@ class LinkChecker
 
         if (isset($GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$result])) {
             $text = $GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$result];
-        } elseif (CurlRequestUtil::HTTP_STATUS_CODE_MESSAGES[$result]) {
-            $text = CurlRequestUtil::HTTP_STATUS_CODE_MESSAGES[$result].' (Statuscode: '.$result.')';
+        } elseif (isset(Response::$statusTexts[$result])) {
+            $text = Response::$statusTexts[$result].' (Statuscode: '.$result.')';
         }
+
+
+
 
         $objTemplate->text = $text;
 
