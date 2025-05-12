@@ -14,7 +14,7 @@ use HeimrichHannot\LinkCheckerBundle\Widget\LinkCheckerWidget;
 
 class LinkCheckerTest extends ContaoTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $container = $this->getContainerWithContaoConfiguration();
         System::setContainer($container);

@@ -8,13 +8,11 @@
 
 namespace HeimrichHannot\LinkCheckerBundle\Tests\Manager;
 
-use Contao\CoreBundle\Config\ResourceFinder;
 use Contao\PageModel;
 use Contao\System;
 use Contao\TestCase\ContaoTestCase;
 use HeimrichHannot\LinkCheckerBundle\Manager\LinkChecker;
 use HeimrichHannot\UtilsBundle\Request\CurlRequestUtil;
-use HeimrichHannot\UtilsBundle\String\StringUtil;
 
 class LinkCheckerTest extends ContaoTestCase
 {
@@ -31,9 +29,9 @@ class LinkCheckerTest extends ContaoTestCase
         }
 
         $GLOBALS['TL_LANG']['linkChecker']['statusCodes'] = [
-            \HeimrichHannot\LinkCheckerBundle\Manager\LinkChecker::STATUS_MAILTO => 'E-Mail Adressen werden nicht geprüft.',
-            \HeimrichHannot\LinkCheckerBundle\Manager\LinkChecker::STATUS_INVALID => 'Ungültige URL, kann nicht geprüft werden.',
-            \HeimrichHannot\LinkCheckerBundle\Manager\LinkChecker::STATUS_TIMEOUT => 'HTTP/1.0 408 Request Time-out',
+            LinkChecker::STATUS_MAILTO => 'E-Mail Adressen werden nicht geprüft.',
+            LinkChecker::STATUS_INVALID => 'Ungültige URL, kann nicht geprüft werden.',
+            LinkChecker::STATUS_TIMEOUT => 'HTTP/1.0 408 Request Time-out',
         ];
 
         System::setContainer($this->getContainerWithContaoConfiguration());
@@ -45,7 +43,7 @@ class LinkCheckerTest extends ContaoTestCase
         return new LinkChecker($curlUtil);
     }
 
-    public function testTest()
+    public function testTest(): void
     {
         global $objPage;
 

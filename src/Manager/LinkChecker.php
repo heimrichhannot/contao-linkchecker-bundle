@@ -123,24 +123,11 @@ class LinkChecker
         if (\strlen($statusCode) > 0) {
             $intStart = substr($statusCode, 0, 1);
         }
-
-        switch ($intStart) {
-            //1xx Informational
-            //3xx Redirection
-            case '1':
-            case '3':
-                return static::CLASS_INFO;
-            //2xx Success
-            case '2':
-                return static::CLASS_SUCCESS;
-
-            // 4xx Client Error
-            // 5xx Server Error
-            case '4':
-            case '5':
-                return static::CLASS_ERROR;
-        }
-
-        return static::CLASS_DEFAULT;
+        return match ($intStart) {
+            '1', '3' => static::CLASS_INFO,
+            '2' => static::CLASS_SUCCESS,
+            '4', '5' => static::CLASS_ERROR,
+            default => static::CLASS_DEFAULT,
+        };
     }
 }

@@ -53,7 +53,7 @@ class LinkCheckerWidget extends Widget
     {
         $objTemplate = new BackendTemplate('be_linkchecker');
 
-        $rand = rand();
+        $rand = random_int(0, mt_getrandmax());
 
         $arrLinks = [];
 
@@ -92,7 +92,7 @@ class LinkCheckerWidget extends Widget
         }
 
         // html code
-        if (false !== strpos($this->value, '<')) {
+        if (str_contains($this->value, '<')) {
             $this->arrLinks = [];
             $objCrawler = new HtmlPageCrawler($this->value);
 
@@ -107,7 +107,7 @@ class LinkCheckerWidget extends Widget
                     /* @var $node  HtmlPageCrawler */
                     $this->addLinkFromNode($node);
                 });
-            } catch (SyntaxErrorException $e) {
+            } catch (SyntaxErrorException) {
             }
         }
 

@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 class HeimrichHannotContaoLinkCheckerBundleTest extends TestCase
 {
-    public function testGetContainerExtension()
+    public function testGetContainerExtension(): void
     {
         $bundle = new HeimrichHannotContaoLinkCheckerBundle();
 

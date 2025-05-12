@@ -28,11 +28,15 @@
   },
   "require-dev": {
     "contao/test-case": "^2.0 || ^3.0 || ^4.0",
-    "contao/manager-plugin": "^2.0",
-    "friendsofphp/php-cs-fixer": "^2.2",
-    "phpunit/phpunit": "^7.0 || ^8.0",
-    "satooshi/php-coveralls": "^2.0",
-    "symfony/phpunit-bridge": "^3.2"
+    "contao/manager-plugin": "^2.13",
+    "phpunit/phpunit": "^8.0 || ^9.0",
+    "php-coveralls/php-coveralls": "^2.7",
+    "symfony/phpunit-bridge": "^3.2",
+    "rector/rector": "^2.0",
+    "contao/contao-rector": "dev-main",
+    "symplify/easy-coding-standard": "^12.5",
+    "phpstan/phpstan": "^2.1",
+    "phpstan/phpstan-symfony": "^2.0"
   },
   "autoload": {
     "psr-4": {
