@@ -8,26 +8,28 @@
 
 namespace HeimrichHannot\LinkCheckerBundle\Manager;
 
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendTemplate;
 use Contao\Validator;
-use HeimrichHannot\UtilsBundle\Request\CurlRequestUtil;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class LinkChecker
 {
-    const STATUS_MAILTO = 'mailto';
-    const STATUS_INVALID = 'invalid';
-    const STATUS_TIMEOUT = '408';
+    public const STATUS_MAILTO = 'mailto';
+    public const STATUS_INVALID = 'invalid';
+    public const STATUS_TIMEOUT = '408';
 
-    const CLASS_DEFAULT = 'lc-default';
-    const CLASS_INFO = 'lc-info';
-    const CLASS_SUCCESS = 'lc-success';
-    const CLASS_ERROR = 'lc-error';
+    public const CLASS_DEFAULT = 'lc-default';
+    public const CLASS_INFO = 'lc-info';
+    public const CLASS_SUCCESS = 'lc-success';
+    public const CLASS_ERROR = 'lc-error';
 
-    private CurlRequestUtil $curlRequestUtil;
-
-    public function __construct(CurlRequestUtil $curlRequestUtil)
-    {
-        $this->curlRequestUtil = $curlRequestUtil;
+    public function __construct(
+        private readonly HttpClientInterface $client,
+        private readonly ContaoFramework $contaoFramework,
+    ) {
     }
 
     /**
@@ -63,13 +65,9 @@ class LinkChecker
             return $this->getResult(static::STATUS_INVALID);
         }
 
-        list($headers, $body) = $this->curlRequestUtil->request($url, [], true);
+        $response = $this->client->request(Request::METHOD_GET, $url);
 
-        if (\is_array($headers)) {
-            return $this->getResult($headers['http_code']);
-        }
-
-        return $this->getResult(static::STATUS_TIMEOUT);
+        return $this->getResult($response->getStatusCode());
     }
 
     /**
@@ -96,14 +94,17 @@ class LinkChecker
      */
     protected function getResult(string $result): string
     {
-        $objTemplate = new FrontendTemplate('linkchecker_result_default');
+        $objTemplate = $this->contaoFramework->createInstance(
+            FrontendTemplate::class,
+            ['linkchecker_result_default']
+        );
 
         $text = $result;
 
         if (isset($GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$result])) {
             $text = $GLOBALS['TL_LANG']['linkChecker']['statusCodes'][$result];
-        } elseif (CurlRequestUtil::HTTP_STATUS_CODE_MESSAGES[$result]) {
-            $text = CurlRequestUtil::HTTP_STATUS_CODE_MESSAGES[$result].' (Statuscode: '.$result.')';
+        } elseif (isset(Response::$statusTexts[$result])) {
+            $text = Response::$statusTexts[$result] . ' (Statuscode: ' . $result . ')';
         }
 
         $objTemplate->text = $text;
@@ -124,23 +125,11 @@ class LinkChecker
             $intStart = substr($statusCode, 0, 1);
         }
 
-        switch ($intStart) {
-            //1xx Informational
-            //3xx Redirection
-            case '1':
-            case '3':
-                return static::CLASS_INFO;
-            //2xx Success
-            case '2':
-                return static::CLASS_SUCCESS;
-
-            // 4xx Client Error
-            // 5xx Server Error
-            case '4':
-            case '5':
-                return static::CLASS_ERROR;
-        }
-
-        return static::CLASS_DEFAULT;
+        return match ($intStart) {
+            '1', '3' => static::CLASS_INFO,
+            '2' => static::CLASS_SUCCESS,
+            '4', '5' => static::CLASS_ERROR,
+            default => static::CLASS_DEFAULT,
+        };
     }
 }

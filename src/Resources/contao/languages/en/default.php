@@ -16,5 +16,5 @@ $arrLang = &$GLOBALS['TL_LANG']['linkChecker'];
 /*
  * Messages
  */
-$arrLang['statusCodes'][LinkChecker::STATUS_MAILTO] = 'E-Mail Adressen werden nicht geprüft.';
-$arrLang['statusCodes'][LinkChecker::STATUS_INVALID] = 'Ungültige URL, kann nicht geprüft werden.';
+$arrLang['statusCodes'][LinkChecker::STATUS_MAILTO] = 'Email addresses are not checked.';
+$arrLang['statusCodes'][LinkChecker::STATUS_INVALID] = 'Invalid URL, cannot be checked.';

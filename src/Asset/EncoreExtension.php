@@ -8,18 +8,11 @@ use HeimrichHannot\LinkCheckerBundle\HeimrichHannotContaoLinkCheckerBundle;
 
 class EncoreExtension implements EncoreExtensionInterface
 {
-
-    /**
-     * @inheritDoc
-     */
     public function getBundle(): string
     {
         return HeimrichHannotContaoLinkCheckerBundle::class;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getEntries(): array
     {
         return [

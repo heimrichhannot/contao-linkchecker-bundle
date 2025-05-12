@@ -19,8 +19,8 @@ use Wa72\HtmlPageDom\HtmlPageCrawler;
 
 class LinkCheckerWidget extends Widget
 {
-    const LINKCHECKER_PARAM = 'lc'; // The param within the url, that holds the test url
-    const LINKCHECKER_TEST_ACTION = 'lc-test'; // The back end action, required for ajax request
+    public const LINKCHECKER_PARAM = 'lc'; // The param within the url, that holds the test url
+    public const LINKCHECKER_TEST_ACTION = 'lc-test'; // The back end action, required for ajax request
     /**
      * Submit user input.
      *
@@ -53,22 +53,25 @@ class LinkCheckerWidget extends Widget
     {
         $objTemplate = new BackendTemplate('be_linkchecker');
 
-        $rand = rand();
+        $rand = random_int(0, mt_getrandmax());
 
         $arrLinks = [];
 
         for ($i = 0, $c = \count($this->arrLinks); $i < $c; ++$i) {
             $url = System::getContainer()->get(Utils::class)->routing()->generateBackendRoute(
-                ['action' => static::LINKCHECKER_TEST_ACTION, static::LINKCHECKER_PARAM => $this->arrLinks[$i]]
+                [
+                    'action' => static::LINKCHECKER_TEST_ACTION,
+                    static::LINKCHECKER_PARAM => $this->arrLinks[$i],
+                ]
             );
-            $url = Environment::get('url').$url;
+            $url = Environment::get('url') . $url;
 
             $objLink = new \stdClass();
             $objLink->url = urldecode($url);
             $objLink->title = $this->arrLinks[$i];
-            $objLink->testUrl = $this->arrLinks[$i].'#'.$rand.$i;
-            $objLink->targetID = 'lc-'.$rand.$i;
-            $objLink->target = '#lc-'.$rand.$i;
+            $objLink->testUrl = $this->arrLinks[$i] . '#' . $rand . $i;
+            $objLink->targetID = 'lc-' . $rand . $i;
+            $objLink->target = '#lc-' . $rand . $i;
             $objLink->text = StringUtil::substr($this->arrLinks[$i], 100);
             $arrLinks[$i] = $objLink;
             unset($this->arrLinks[$i]);
@@ -92,7 +95,7 @@ class LinkCheckerWidget extends Widget
         }
 
         // html code
-        if (false !== strpos($this->value, '<')) {
+        if (str_contains($this->value, '<')) {
             $this->arrLinks = [];
             $objCrawler = new HtmlPageCrawler($this->value);
 
@@ -107,7 +110,7 @@ class LinkCheckerWidget extends Widget
                     /* @var $node  HtmlPageCrawler */
                     $this->addLinkFromNode($node);
                 });
-            } catch (SyntaxErrorException $e) {
+            } catch (SyntaxErrorException) {
             }
         }
 
