@@ -13,6 +13,7 @@ use Contao\Environment;
 use Contao\StringUtil;
 use Contao\System;
 use Contao\Widget;
+use HeimrichHannot\LinkCheckerBundle\Manager\LinkChecker as LinkCheckerManager;
 use HeimrichHannot\UtilsBundle\Util\Utils;
 use Symfony\Component\CssSelector\Exception\SyntaxErrorException;
 use Wa72\HtmlPageDom\HtmlPageCrawler;
@@ -20,6 +21,7 @@ use Wa72\HtmlPageDom\HtmlPageCrawler;
 class LinkCheckerWidget extends Widget
 {
     public const LINKCHECKER_PARAM = 'lc'; // The param within the url, that holds the test url
+    public const LINKCHECKER_TIMEOUT_PARAM = 'lc_timeout'; // The param that holds the request timeout in seconds
     public const LINKCHECKER_TEST_ACTION = 'lc-test'; // The back end action, required for ajax request
     /**
      * Submit user input.
@@ -54,6 +56,7 @@ class LinkCheckerWidget extends Widget
         $objTemplate = new BackendTemplate('be_linkchecker');
 
         $rand = random_int(0, mt_getrandmax());
+        $timeout = $this->getTimeout();
 
         $arrLinks = [];
 
@@ -73,6 +76,7 @@ class LinkCheckerWidget extends Widget
             $objLink->targetID = 'lc-' . $rand . $i;
             $objLink->target = '#lc-' . $rand . $i;
             $objLink->text = StringUtil::substr($this->arrLinks[$i], 100);
+            $objLink->timeout = $timeout;
             $arrLinks[$i] = $objLink;
             unset($this->arrLinks[$i]);
         }
@@ -115,6 +119,17 @@ class LinkCheckerWidget extends Widget
         }
 
         return \is_array($this->arrLinks) && !empty($this->arrLinks);
+    }
+
+    protected function getTimeout(): int
+    {
+        $timeout = $this->linkCheckerTimeout ?? null;
+
+        if (null === $timeout || '' === $timeout || !is_numeric($timeout) || (int) $timeout < 1) {
+            return LinkCheckerManager::DEFAULT_TIMEOUT;
+        }
+
+        return (int) $timeout;
     }
 
     /**

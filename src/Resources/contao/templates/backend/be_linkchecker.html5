@@ -9,7 +9,7 @@
     <?php foreach ($this->links as $objLink): ?>
         <tr>
             <td class="link">
-                <span title="<?= $objLink->title; ?>" class="url" data-linkchecker="true" data-target="<?= $objLink->target; ?>"
+                <span title="<?= $objLink->title; ?>" class="url" data-linkchecker="true" data-target="<?= $objLink->target; ?>" data-timeout="<?= $objLink->timeout; ?>"
                       data-url="<?= $objLink->url; ?>"><?= $objLink->text; ?></span>
             </td>
             <td class="status" id="<?= $objLink->targetID; ?>"><span class="lc-loading-indicator"></span></td>

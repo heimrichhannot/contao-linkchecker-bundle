@@ -35,6 +35,9 @@ Provide a valid `load_callback` within you DataContainer field configuration.
 'linkChecker'       => array(
 	'label'         => &$GLOBALS['TL_LANG']['tl_sample']['linkChecker'],
 	'inputType'     => 'linkChecker',
+	'eval'          => array(
+	    'linkCheckerTimeout' => 10,
+	),
 	'load_callback' => array(
 		array('MyClass', 'getLinkCheckerHtml'),
 	),
@@ -42,6 +45,7 @@ Provide a valid `load_callback` within you DataContainer field configuration.
 ```
 
 You can return html-code with anchor tags, a single link or an array of links within your `load_callback`.
+The `linkCheckerTimeout` eval option configures the timeout in seconds for the backend link check. If omitted or invalid, the default timeout is 10 seconds.
 
 ```
 // MyClass

@@ -35,7 +35,10 @@ class ExecutePreActionsListener
             return;
         }
 
-        $strStatus = $this->linkChecker->test($request->request->get(LinkCheckerWidget::LINKCHECKER_PARAM));
+        $strStatus = $this->linkChecker->test(
+            $request->request->get(LinkCheckerWidget::LINKCHECKER_PARAM),
+            $request->request->get(LinkCheckerWidget::LINKCHECKER_TIMEOUT_PARAM)
+        );
 
         $objResponse = new ResponseSuccess();
         $objResponse->setResult(new ResponseData($strStatus));
