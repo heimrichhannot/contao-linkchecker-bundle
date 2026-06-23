@@ -129,7 +129,7 @@ class LinkCheckerWidget extends Widget
             return LinkCheckerManager::DEFAULT_TIMEOUT;
         }
 
-        return (int) $timeout;
+        return min((int) $timeout, LinkCheckerManager::MAX_TIMEOUT);
     }
 
     /**

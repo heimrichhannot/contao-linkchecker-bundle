@@ -21,7 +21,9 @@ class LinkChecker
     public const STATUS_MAILTO = 'mailto';
     public const STATUS_INVALID = 'invalid';
     public const STATUS_TIMEOUT = '408';
+    public const STATUS_TRANSPORT_ERROR = 'transport_error';
     public const DEFAULT_TIMEOUT = 10;
+    public const MAX_TIMEOUT = 60;
 
     public const CLASS_DEFAULT = 'lc-default';
     public const CLASS_INFO = 'lc-info';
@@ -77,7 +79,7 @@ class LinkChecker
 
             return $this->getResult($response->getStatusCode());
         } catch (TransportExceptionInterface) {
-            return $this->getResult(static::STATUS_TIMEOUT);
+            return $this->getResult(static::STATUS_TRANSPORT_ERROR);
         }
     }
 
@@ -106,7 +108,7 @@ class LinkChecker
             return static::DEFAULT_TIMEOUT;
         }
 
-        return (int) $timeout;
+        return min((int) $timeout, static::MAX_TIMEOUT);
     }
 
     /**
@@ -139,6 +141,10 @@ class LinkChecker
      */
     protected function getStatusClass(string $statusCode): string
     {
+        if (static::STATUS_TRANSPORT_ERROR === $statusCode) {
+            return static::CLASS_ERROR;
+        }
+
         $intStart = null;
 
         if (\strlen($statusCode) > 0) {
