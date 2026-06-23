@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.7.0] - 2026-06-23
+- Added: timeout option ([#2](https://github.com/heimrichhannot/contao-linkchecker-bundle/pull/2))
+
 ## [2.6.0] - 2024-05-15
 - Changed: allow contao 5
 - Changed: require php 8
