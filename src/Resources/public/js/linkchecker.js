@@ -240,7 +240,12 @@
         this.element = element;
         this.options = options;
         this.url = this.element.getAttribute('data-url');
+        this.timeout = parseInt(this.element.getAttribute('data-timeout'), 10);
         this.element.linkchecker = this;
+
+        if (isNaN(this.timeout) || this.timeout < 1) {
+            this.timeout = 10;
+        }
 
         if (this.element.getAttribute('data-target')) {
             this.target = document.querySelector(this.element.getAttribute('data-target'));
@@ -276,6 +281,7 @@
 
                 var xhr = new XMLHttpRequest();
                 xhr.open(method, url, true);
+                xhr.timeout = (_this.timeout + 2) * 1000;
                 xhr.withCredentials = !!_this.options.withCredentials;
                 response = null;
                 updateProgress = function() {
@@ -309,6 +315,16 @@
                     }
                 };
                 xhr.onerror = function () {
+                    _this._failed();
+
+                    reject({
+                        status: this.status,
+                        statusText: xhr.statusText
+                    });
+                };
+                xhr.ontimeout = function () {
+                    _this._failed();
+
                     reject({
                         status: this.status,
                         statusText: xhr.statusText
@@ -338,6 +354,7 @@
                         formData.append(key, value);
                     }
                 }
+                formData.append('lc_timeout', _this.timeout);
 
                 _requests.push(xhr);
 
@@ -356,6 +373,12 @@
             return true;
         }
 
+        this.target.innerHTML = '-';
+
+        return false;
+    };
+
+    LinkChecker.prototype._failed = function () {
         this.target.innerHTML = '-';
 
         return false;

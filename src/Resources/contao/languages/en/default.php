@@ -18,3 +18,5 @@ $arrLang = &$GLOBALS['TL_LANG']['linkChecker'];
  */
 $arrLang['statusCodes'][LinkChecker::STATUS_MAILTO] = 'Email addresses are not checked.';
 $arrLang['statusCodes'][LinkChecker::STATUS_INVALID] = 'Invalid URL, cannot be checked.';
+$arrLang['statusCodes'][LinkChecker::STATUS_TIMEOUT] = 'Request timed out.';
+$arrLang['statusCodes'][LinkChecker::STATUS_TRANSPORT_ERROR] = 'Request failed.';

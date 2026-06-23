@@ -13,6 +13,7 @@ use Contao\FrontendTemplate;
 use Contao\Validator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class LinkChecker
@@ -20,6 +21,9 @@ class LinkChecker
     public const STATUS_MAILTO = 'mailto';
     public const STATUS_INVALID = 'invalid';
     public const STATUS_TIMEOUT = '408';
+    public const STATUS_TRANSPORT_ERROR = 'transport_error';
+    public const DEFAULT_TIMEOUT = 10;
+    public const MAX_TIMEOUT = 60;
 
     public const CLASS_DEFAULT = 'lc-default';
     public const CLASS_INFO = 'lc-info';
@@ -39,13 +43,15 @@ class LinkChecker
      *
      * @return array|bool|mixed
      */
-    public function test($varLinks)
+    public function test($varLinks, int|string|null $timeout = null)
     {
+        $timeout = $this->normalizeTimeout($timeout);
+
         if (!\is_array($varLinks)) {
-            return $this->testOne($varLinks);
+            return $this->testOne($varLinks, $timeout);
         }
 
-        return $this->testAll($varLinks);
+        return $this->testAll($varLinks, $timeout);
     }
 
     /**
@@ -55,7 +61,7 @@ class LinkChecker
      *
      * @return string The translated status code, or false if the link was not tested
      */
-    protected function testOne(string $url): string
+    protected function testOne(string $url, int $timeout): string
     {
         if (str_starts_with($url, 'mailto:')) {
             return $this->getResult(static::STATUS_MAILTO);
@@ -65,9 +71,16 @@ class LinkChecker
             return $this->getResult(static::STATUS_INVALID);
         }
 
-        $response = $this->client->request(Request::METHOD_GET, $url);
+        try {
+            $response = $this->client->request(Request::METHOD_GET, $url, [
+                'max_duration' => $timeout,
+                'timeout' => $timeout,
+            ]);
 
-        return $this->getResult($response->getStatusCode());
+            return $this->getResult($response->getStatusCode());
+        } catch (TransportExceptionInterface) {
+            return $this->getResult(static::STATUS_TRANSPORT_ERROR);
+        }
     }
 
     /**
@@ -77,16 +90,25 @@ class LinkChecker
      *
      * @return array The  list of tested links with translated status code, or false if the link was not tested
      */
-    protected function testAll(array $arrLinks): array
+    protected function testAll(array $arrLinks, int $timeout): array
     {
         $arrResults = [];
 
         foreach ($arrLinks as $strKey => $strUrl) {
-            $arrResults[$strUrl] = $this->testOne($strUrl);
+            $arrResults[$strUrl] = $this->testOne($strUrl, $timeout);
             unset($arrLinks);
         }
 
         return $arrResults;
+    }
+
+    protected function normalizeTimeout(int|string|null $timeout): int
+    {
+        if (null === $timeout || '' === $timeout || !is_numeric($timeout) || (int) $timeout < 1) {
+            return static::DEFAULT_TIMEOUT;
+        }
+
+        return min((int) $timeout, static::MAX_TIMEOUT);
     }
 
     /**
@@ -119,6 +141,10 @@ class LinkChecker
      */
     protected function getStatusClass(string $statusCode): string
     {
+        if (static::STATUS_TRANSPORT_ERROR === $statusCode) {
+            return static::CLASS_ERROR;
+        }
+
         $intStart = null;
 
         if (\strlen($statusCode) > 0) {
