@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.7.1] - 2026-11-26
+- Fixed: statuses kept loading forever after a Turbo visit (Contao 5 back end) - the checks only started on DOMContentLoaded
+- Fixed: an error response (4xx/5xx) from the check request left its spinner running
+
 ## [2.7.0] - 2026-06-23
 - Added: timeout option ([#2](https://github.com/heimrichhannot/contao-linkchecker-bundle/pull/2))
 

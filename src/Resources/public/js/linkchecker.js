@@ -305,6 +305,8 @@
                         }
                     }
                     if (!((200 <= (_ref = xhr.status) && _ref < 300))) {
+                        _this._failed();
+
                         reject({
                             status: this.status,
                             statusText: xhr.statusText
@@ -386,7 +388,18 @@
 
     LinkCheckerRegistry = {
         init: function () {
+            this.stopRecursion = false;
             this.register();
+        },
+        // Once per page: a full load, or a page Turbo rendered (Contao 5's back end) - there
+        // is no DOMContentLoaded after a Turbo visit, and the statuses kept loading forever.
+        start: function () {
+            if (this.page === document.body) {
+                return;
+            }
+
+            this.page = document.body;
+            this.init();
         },
         abort: function () {
             this.stopRecursion = true;
@@ -410,6 +423,7 @@
         register: function () {
 
             var self = this,
+                run = this.run = (this.run || 0) + 1,
                 elements = document.querySelectorAll('[data-linkchecker]'),
                 config = {};
 
@@ -417,7 +431,12 @@
 
                 function myFunc(element, remainingElements, callback) {
 
-                    if(_this.stopRecursion){
+                    // a newer run (the next page) takes over
+                    if (run !== _this.run) {
+                        return;
+                    }
+
+                    if (_this.stopRecursion) {
 
                         for (var i = 0, len = _requests.length; i < len; i++) {
                             var xhr = _requests[i];
@@ -449,7 +468,11 @@
     };
 
     document.addEventListener('DOMContentLoaded', function(event) {
-        LinkCheckerRegistry.init();
+        LinkCheckerRegistry.start();
+    });
+
+    document.addEventListener('turbo:load', function () {
+        LinkCheckerRegistry.start();
     });
 
     window.addEventListener('beforeunload', function(event) {
